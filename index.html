@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Charles Soares Cardoso | Tech Learning</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="app">
+    <div class="urgency-bar py-2 text-center" v-if="vagasRestantes > 0">
+        🚨 Restam apenas **{{ vagasRestantes }} vagas** para a nova Turma!
+    </div>
+
+    <nav class="navbar navbar-expand-lg sticky-top">
+        <div class="container">
+            <a class="navbar-brand fw-bold text-white" href="#">
+                INFORMÁTICA<span class="text-primary"> SOU PROFISSIONAL</span>
+            </a>
+            
+            <div class="ms-auto d-flex gap-2">                
+                <a href="#jornada" class="btn btn-primary btn-sm">CURSOS</a>
+                
+                <a href="#investimento" class="btn btn-success btn-sm text-white">VER INVESTIMENTO</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="hero-section py-5">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-5 text-center mb-4">
+                    <div class="profile-frame">
+                        <img src="img/foto_perfil.png" alt="Prof. Charles" class="profile-img">
+                    </div>
+                </div>
+                <div class="col-lg-7">
+                    <h1 class="display-4 fw-bold">Charles Soares Cardoso</h1>
+                    <h2 class="h4 text-blue-glow mb-3"><span id="typed"></span></h2>
+                    <p class="lead opacity-75">Professor de Informática e Diretor de Tecnologia em Nova Porteirinha. Dedicado ao ensino prático de ferramentas tecnológicas, transformando a sala de aula em um laboratório real para as demandas do mercado de trabalho.</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <section id="jornada" class="py-5">
+        <div class="container">
+            <h2 class="text-center mb-5 fw-bold display-5">Jornada de Conhecimento - Cursos</h2>
+
+            <div v-for="(modulo, index) in modulos" :key="modulo.id" class="mb-5 reveal">
+                <div class="module-led-box clickable-card" 
+                     @click="abrirDetalhes(modulo)"
+                     :style="{ 
+                        '--led-color': modulo.cor, 
+                        'background-image': 'linear-gradient(rgba(5, 7, 10, 0.8), rgba(5, 7, 10, 0.8)), url(' + modulo.bgImg + ')' 
+                     }">
+                    <div class="row align-items-center" :class="index % 2 !== 0 ? 'flex-row-reverse' : ''">
+                        <div class="col-lg-12 text-center p-4">
+                            <span class="badge mb-3 px-3 py-2" :style="{ backgroundColor: modulo.cor }">Módulo 0{{index + 1}}</span>
+                            <h3 class="display-5 fw-bold mb-3">{{ modulo.titulo }}</h3>
+                            <p class="lead opacity-90 mb-4 max-width-text mx-auto">{{ modulo.desc }}</p>
+                            <p class="small text-white-50"><i class="fas fa-plus-circle me-2"></i>Clique para ver detalhes</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="modal fade" id="modalModulo" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content bg-dark border-led-modal" :style="{ '--modal-color': moduloAtivo.cor }">
+                <div class="modal-header border-0">
+                    <h3 class="modal-title fw-bold" :style="{ color: moduloAtivo.cor }">{{ moduloAtivo.titulo }}</h3>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body py-4">
+                    <p class="lead text-white opacity-90">{{ moduloAtivo.textoPopUp }}</p>
+                </div>
+                <div class="modal-footer border-0">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Fechar</button>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section id="investimento" class="py-5 bg-darker">
+        <div class="container">
+            <h2 class="text-center mb-5 fw-bold">Escolha seu Plano de Evolução</h2>
+            <div class="row g-4 justify-content-center">
+                
+                <div class="col-md-4">
+                    <div class="price-card">
+                        <h3 class="h5">Módulo individual</h3>
+                        <div class="price-value">R$ 390,00</div> 
+                        <p class="small opacity-50">Ideal apenas para um conteúdo específico</p>
+                        <hr class="border-secondary">
+                        <ul class="list-unstyled text-start small">
+                            <li><i class="fas fa-check text-success me-2"></i> Módulo Completo</li>
+                            <li><i class="fas fa-check text-success me-2"></i> Apostila e Certificado Incluso</li>
+                            <li class="opacity-50"><i class="fas fa-times me-2"></i> Pagamento Único</li>
+                        </ul>
+                        <button @click="selecionarPlano('Módulo individual')" class="btn btn-outline-light w-100 mt-3">COMEÇAR AGORA</button>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="price-card highlight">
+                        <div class="badge-pop">MAIS PROCURADO</div>
+                        <h3 class="h5">Formação Profissional</h3>
+                        <div class="price-value">3x R$ 300,00</div>
+                        <p class="small opacity-50">+ Matrícula R$ 120,00</p>
+                        <hr class="border-primary">
+                        <ul class="list-unstyled text-start small">
+                            <li><i class="fas fa-check text-primary me-2"></i> Todos os 4 Módulos</li>
+                            <li><i class="fas fa-check text-primary me-2"></i> De 3 a 4 meses de aula</li>
+                            <li><i class="fas fa-check text-primary me-2"></i> Material e Certificado Incluso</li>
+                        </ul>
+                        <button @click="selecionarPlano('Formação Profissional')" class="btn btn-primary w-100 mt-3">GARANTIR VAGA</button>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="price-card pix-card">
+                        <h3 class="h5">Plano Tech (Pix)</h3>
+                        <div class="price-value text-success">R$ 780,00</div> 
+                        <p class="small text-success fw-bold">Economia de R$ 240,00!</p> <hr class="border-success">
+                        <ul class="list-unstyled text-start small">
+                            <li><i class="fas fa-check text-success me-2"></i> Todos os 4 Módulos</li>
+                            <li><i class="fas fa-bolt text-success me-2"></i> **Matrícula Isenta**</li>
+                            <li><i class="fas fa-check text-success me-2"></i> Material e Certificado Incluso</li>
+                        </ul>
+                        <button @click="selecionarPlano('Plano Tech (Pix)')" class="btn btn-success w-100 mt-3 text-white fw-bold">APROVEITAR DESCONTO</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="inscricao" class="py-5">
+        <div class="container">
+            <div class="module-led-box" style="--led-color: #3333ff">
+                <h2 class="text-center mb-4">Ficha de Pré-Inscrição</h2>
+                <p class="text-center mb-5 opacity-75">O pagamento será realizado presencialmente no início das aulas.</p>
+                
+                <form action="https://formspree.io/f/charlesprofessor.info@gmail.com" method="POST" class="row g-4">
+                    <div class="col-md-6">
+                        <label class="form-label">Nome Completo</label>
+                        <input type="text" name="nome" class="form-control bg-dark text-white border-secondary" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">WhatsApp</label>
+                        <input type="tel" name="whatsapp" class="form-control bg-dark text-white border-secondary" required placeholder="38 98424-8388">
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label">Plano de Interesse</label>
+                        <select name="plano" id="plano" v-model="planoEscolhido" class="form-control bg-dark text-white border-secondary" required>
+                            <option value="" disabled>Selecione um plano</option>
+                            <option value="Módulo individual">Módulo individual - R$ 390,00</option>
+                            <option value="Formação Profissional">Formação Profissional - 3x R$ 300,00 + Matrícula R$ 120,00</option>
+                            <option value="Plano Tech (Pix)">Plano Tech (Pix) - R$ 780,00</option>
+                        </select>
+                    </div>
+                    <div class="col-12 text-center mt-5">
+                        <button type="submit" class="btn btn-glow w-100 py-3 fw-bold">ENVIAR INSCRIÇÃO</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <a href="https://wa.me/5538984248388?text=Olá%20Prof.%20Charles,%20vim%20pelo%20site!" class="whatsapp-fixed" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script src="https://unpkg.com/typed.js@2.0.16/dist/typed.umd.js"></script>
+<script src="https://unpkg.com/scrollreveal"></script>
+<script src="script.js"></script>
+</body>
+</html>
